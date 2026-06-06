@@ -81,6 +81,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
               description: product.description,
               category: product.category,
               thumbnail: product.thumbnail,
+              image: product.images?.[0] ?? product.thumbnail ?? '',
               rating: product.rating,
             }} />
             <p className='text-xs text-gray-500 text-center'>Ships from and sold by Amazon Clone</p>
