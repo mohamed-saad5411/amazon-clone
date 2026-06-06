@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #e5e7eb;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Product Sans', sans-serif;
+}
+
+@layer components {
+  .btn {
+    @apply transition duration-500 inline-block font-bold text-center cursor-pointer border border-solid border-transparent py-1.5 px-3 text-sm rounded-md;
+  }
+
+  .btn-yellow {
+    @apply  bg-yellow-500 text-white hover:bg-yellow-600;
+  }
+  .btn-add-or-remove {
+    @apply border border-green-600 text-green-600 hover:text-white hover:bg-green-600
+  }
+  .btn-remove {
+    @apply border border-red-600 text-red-600 hover:text-white hover:bg-red-700
+  }
+
+
+
+}
+
