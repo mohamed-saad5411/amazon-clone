@@ -6,7 +6,7 @@ import { Product } from '@/types/product'
 
 export default function ProductFeed({ products }: { products: Product[] }) {
     return (
-        <div className='-mt-20 md:-mt-35 lg:-mt-45 grid grid-flow-row-dense w-3/4 m-auto lg:w-[90%] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+        <div className='-mt-5 md:-mt-35 lg:-mt-45 grid grid-flow-row-dense w-3/4 m-auto lg:w-[90%] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
             {products.slice(0, 4).map(({ category, thumbnail, rating, title, id, price, description }) =>
                 <ProductInHome
                     key={id}

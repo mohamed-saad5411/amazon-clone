@@ -20,20 +20,6 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity || 1
     }))
 
-    // const session = await stripe.checkout.sessions.create({
-    //     payment_method_types: ['card'],
-    //     shipping_address_collection: {
-    //         allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'BE', 'CH', 'AT']
-    //     },
-    //     line_items: transformedItems,
-    //     mode: 'payment',
-    //     // success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
-    //     success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-    //     cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
-    //     metadata: {
-    //         images: JSON.stringify(items.map((item: any) => item.thumbnail || item.image))
-    //     }
-    // })
 
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -42,8 +28,8 @@ export async function POST(req: NextRequest) {
         },
         line_items: transformedItems,
         mode: 'payment',
-        success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `http://localhost:3000/cart`,
+        success_url: `https://amazon-clone-5.netlify.app/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `https://amazon-clone-5.netlify.app/cart`,
         metadata: {
             // items: JSON.stringify(items),
             userId: items[0]?.userId || '',

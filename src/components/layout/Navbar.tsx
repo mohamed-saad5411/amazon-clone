@@ -69,10 +69,52 @@ export default function Navbar() {
     return <>
         <nav className='fixed z-50 top-0 left-0 right-0'>
             {/* top navbar */}
-            <div className="flex items-center justify-between p-4 bg-gray-900">
+            {/* large screen navbar */}
+            <div className="sm:flex items-center hidden justify-between p-4 bg-gray-900">
                 <Logo />
                 <SearchBar />
-                <div className='flex items-center mx-6 space-x-6 text-xs text-white'>
+                <div className='flex items-center mx-6 mt-4 space-x-6 text-xs text-white'>
+                    {/* <Link href="/login" className='cursor-pointer hover:text-gray-300'>
+                        <p>Hello, mohamed</p>
+                        <p>Account, Lists</p>
+                    </Link> */}
+
+                    {user ? <div onClick={handleLogout} className='cursor-pointer hover:text-gray-300'>
+                        <p>Hello, {user.user_metadata.name}</p>
+                        <p>sign out</p>
+                    </div>
+                        :
+                        <Link href="/login" className='cursor-pointer hover:text-gray-300'>
+                            <p>Hello, Guest</p>
+                            <p>Sign In</p>
+                        </Link>
+                    }
+
+                    <Link href="/orders" className='cursor-pointer hover:text-gray-300'>
+                        <p>Returns</p>
+                        <p>& Orders</p>
+                    </Link>
+                    {user ?
+                        <Link href="/cart" className='relative cursor-pointer hover:text-gray-300'>
+                            <div className='absolute left-4 bottom-3 w-[1.2rem] flex hover:bg-yellow-600 justify-center items-center rounded-full h-[1.4rem] bg-yellow-500 font-bold '>
+                                <span className='font-bold '>{cartItems ? cartItems.length : 0}</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
+
+                        </Link>
+
+                        : ''}
+                </div>
+            </div>
+            {/* responsive */}
+            <div className="flex items-center sm:hidden md:flex-row flex-col justify-between p-4 bg-gray-900">
+                <div className='flex items-center h-15 justify-between w-full md:w-auto'>
+                    <Logo />
+                    <SearchBar />
+                </div>
+                <div className='flex items-center justify-evenly w-full mx-6 mt-4 space-x-6 text-xs text-white'>
                     {/* <Link href="/login" className='cursor-pointer hover:text-gray-300'>
                         <p>Hello, mohamed</p>
                         <p>Account, Lists</p>
@@ -112,10 +154,10 @@ export default function Navbar() {
             <div className="flex items-center p-1 space-x-3 text-xs text-white bg-gray-700 h-7">
 
                 {/* dropdown */}
-                <div className="relative inline-block text-left " onMouseEnter={() => setDropDown(true)} onMouseLeave={() => setDropDown(false)}>
-                    <button className="inline-flex justify-center items-center gap-x-1.5 rounded-md  transition-all duration-400">
+                <div className="relative md:text-sm text-[10px] inline-block text-left " onMouseEnter={() => setDropDown(true)} onMouseLeave={() => setDropDown(false)}>
+                    <button className="inline-flex justify-center items-center  rounded-md  transition-all duration-400">
                         All Categories
-                        <svg className="-mr-1 h-5 w-5 text-gray-400 transition-all duration-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg className="-mr-1 md:h-5 h-4 md:w-5 w-4 text-gray-400 transition-all duration-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                         </svg>
                     </button>
@@ -133,7 +175,10 @@ export default function Navbar() {
                 </div>
 
 
-                <div className='items-center space-x-3 md:flex lg:hidden'>
+                <div className='items-center text-[12px] space-x-3 md:hidden'>
+                    {navitems.slice(0, 4)}
+                </div>
+                <div className='items-center hidden space-x-3 md:flex lg:hidden'>
                     {navitems.slice(0, 7)}
                 </div>
                 <div className='items-center space-x-3 hidden lg:flex'>
