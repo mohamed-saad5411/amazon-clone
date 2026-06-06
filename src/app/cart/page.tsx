@@ -25,7 +25,7 @@ export default function Cart() {
     }
 
     return (
-        <section className='p-8 md:w-[80%] m-auto my-4'>
+        <section className='p-8 md:w-[80%] m-auto mt-14'>
             <div className='col-span-4'>
                 <Image
                     src="/images/carousel4.jpg"
@@ -39,7 +39,7 @@ export default function Cart() {
                 <div className='flex flex-col gap-4'>
                     {(cartItems && cartItems.length > 0) ? cartItems.map((item) =>
                         <div key={item.id} className='grid bg-white p-4 shadow-md rounded-sm grid-cols-7'>
-                            <div className='col-span-3 md:col-span-1 flex'>
+                            <div className='col-span-7 md:col-span-1 flex justify-center items-center'>
                                 <Image
                                     src={item.thumbnail ?? item.image ?? '/images/placeholder.png'}
                                     alt={item.title}
@@ -48,11 +48,11 @@ export default function Cart() {
                                     className='object-contain'
                                 />
                             </div>
-                            <div className='col-span-4 p-3 rounded-sm bg-gray-100 flex flex-col'>
-                                <h3>{item.title}</h3>
+                            <div className='col-span-7 md:col-span-4 p-3 rounded-sm bg-gray-100 flex flex-col'>
+                                <h3 className='font-bold text-xl'>{item.title}</h3>
                                 <p className='my-3 text-sm flex-1'>{item.description}</p>
-                                <p>Product Price: ${Number(item.price).toFixed(2)}</p>
-                                <p>Subtotal: ${(Number(item.price) * (item.quantity || 1)).toFixed(2)}</p>
+                                <p className='font-bold text-sm'>Product Price: ${Number(item.price).toFixed(2)}</p>
+                                <p className='font-bold text-sm'>Subtotal: ${(Number(item.price) * (item.quantity || 1)).toFixed(2)}</p>
                             </div>
                             <div className='col-span-7 mt-9 md:col-span-2 p-2 flex flex-col justify-between gap-3'>
                                 <div className='flex items-center justify-between'>
