@@ -7,7 +7,7 @@ export interface Product {
     category: string
     thumbnail: string
     rating: number
-    image?: string      // بعض الـ products بتيجي بـ image بدل thumbnail
+    image: string      // بعض الـ products بتيجي بـ image بدل thumbnail
     quantity?: number   // optional في الـ API، بس دايماً موجودة في الـ cart
 }
 

@@ -17,7 +17,7 @@ export default function Cart() {
         const stripe = await stripePromise
 
         const checkoutSession = await axios.post('/api/create-checkOut-session', {
-            items: cartItems.map( item => ({...item, userId }) ),
+            items: cartItems.map(item => ({ ...item, userId })),
             email: ''
         })
 
@@ -41,7 +41,7 @@ export default function Cart() {
                         <div key={item.id} className='grid bg-white p-4 shadow-md rounded-sm grid-cols-7'>
                             <div className='col-span-3 md:col-span-1 flex'>
                                 <Image
-                                    src={item.thumbnail || item.image}
+                                    src={item.thumbnail ?? item.image ?? '/images/placeholder.png'}
                                     alt={item.title}
                                     width={1000}
                                     height={400}
