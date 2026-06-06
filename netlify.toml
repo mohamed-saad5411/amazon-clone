@@ -1,9 +1,16 @@
 [build]
   command = "npm run build"
   publish = ".next"
- 
+
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
- 
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
+
+[build.processing]
+  skip_processing = false
+
+[[edge_functions]]
+  path = "/*"
+  function = "___netlify-edge-handler-middleware"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
