@@ -21,8 +21,10 @@ const nextConfig: NextConfig = {
   env: {
     stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     stripeSecretKey: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
+  },
+  experimental: {
+    serverComponentsExternalPackages: ["@opentelemetry/api"],
   }
-
 };
 
 export default nextConfig;
