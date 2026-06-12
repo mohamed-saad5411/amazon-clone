@@ -1,34 +1,31 @@
 'use client'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 export default function Orders() {
     const [orders, setOrders] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
-    const router = useRouter()
 
     useEffect(() => {
-        async function getOrders() {
-            const { data: { user } } = await supabase.auth.getUser()
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            console.log('user:', user?.email)
             if (!user) {
-                router.push('/login')
+                window.location.href = '/login'
                 return
             }
 
-            const { data, error } = await supabase
-                .from('orders')
+            supabase.from('orders')
                 .select('*')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
-
-            if (!error) setOrders(data || [])
-            setLoading(false)
-        
-        }
-
-        getOrders()
+                .then(({ data, error }) => {
+                    console.log('orders:', data)
+                    console.log('error:', error)
+                    setOrders(data || [])
+                    setLoading(false)
+                })
+        })
     }, [])
 
     if (loading) return <div className='flex justify-center items-center min-h-screen'>Loading...</div>
@@ -36,24 +33,17 @@ export default function Orders() {
     return (
         <section className='p-8 md:w-[80%] m-auto my-4'>
             <h1 className='text-3xl font-bold mb-8'>Your Orders</h1>
-
             {orders.length === 0 ? (
                 <p className='text-gray-500'>No orders yet.</p>
             ) : (
                 <div className='flex flex-col gap-4'>
-                    {orders.map((order) => {
-                        console.log(order.created_at);
-                        
-                        return  <>
+                    {orders.map((order) => (
                         <div key={order.id} className='bg-white p-4 rounded-md shadow-md'>
                             <div className='flex justify-between items-center mb-2'>
                                 <p className='text-sm text-gray-500'>
                                     {new Date(order.created_at).toLocaleDateString('en-GB', {
-                                        day: 'numeric', month: 'long', year: 'numeric',
-                                        timeZone: 'UTC'
-                                    })
-                                    
-                                    }
+                                        day: 'numeric', month: 'long', year: 'numeric'
+                                    })}
                                 </p>
                                 <p className='font-bold text-lg'>${order.total}</p>
                             </div>
@@ -70,8 +60,7 @@ export default function Orders() {
                                 ))}
                             </div>
                         </div>
-                        </>
-                    })}
+                    ))}
                 </div>
             )}
         </section>

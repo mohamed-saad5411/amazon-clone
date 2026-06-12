@@ -14,6 +14,7 @@ import { useCartUser } from '@/hooks/useCartUser';
 export default function Navbar() {
     // const cartItems = useSelector(selectItems)
     const [user, setUser] = useState<any>(null)
+    const [isAdmin, setIsAdmin] = useState(false)
     const [dropDown, setDropDown] = useState(false)
     const supabase = createClient()
     const router = useRouter()
@@ -50,18 +51,32 @@ export default function Navbar() {
         </Link>
     })
 
-
     useEffect(() => {
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
             setUser(session?.user ?? null)
+            if (session?.user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', session.user.id)
+                    .single()
+                setIsAdmin(profile?.role === 'admin')
+            } else {
+                setIsAdmin(false)
+            }
         })
+
+        // console.log(user);
 
         return () => listener.subscription.unsubscribe()
     }, [])
 
 
+
     async function handleLogout() {
         await supabase.auth.signOut()
+        // window.location.href = '/login'
+        router.refresh()
         router.push('/login')
     }
 
@@ -79,10 +94,10 @@ export default function Navbar() {
                         <p>Account, Lists</p>
                     </Link> */}
 
-                    {user ? <div onClick={handleLogout} className='cursor-pointer hover:text-gray-300'>
+                    {user ? <Link href='/login' onClick={handleLogout} className='cursor-pointer hover:text-gray-300'>
                         <p>Hello, {user.user_metadata.name}</p>
                         <p>sign out</p>
-                    </div>
+                    </Link>
                         :
                         <Link href="/login" className='cursor-pointer hover:text-gray-300'>
                             <p>Hello, Guest</p>
@@ -90,9 +105,10 @@ export default function Navbar() {
                         </Link>
                     }
 
-                    <Link href="/orders" className='cursor-pointer hover:text-gray-300'>
+                    <Link href="/userOrders" className='cursor-pointer hover:text-gray-300'>
                         <p>Returns</p>
                         <p>& Orders</p>
+
                     </Link>
                     {user ?
                         <Link href="/cart" className='relative cursor-pointer hover:text-gray-300'>
@@ -106,27 +122,66 @@ export default function Navbar() {
                         </Link>
 
                         : ''}
+
+                    {/* {user?.user_metadata?.role === 'admin' ? <>
+                        <Link href="/admin" className='cursor-pointer hover:text-gray-300'>
+                            <p>Admin</p>
+                            <p>Dashboard</p>
+                        </Link>
+                    </> : ''} */}
+
+                    {isAdmin && (
+                        <Link href="/admin" className='cursor-pointer hover:text-gray-300'>
+                            <p>Admin</p>
+                            <p>Dashboard</p>
+                        </Link>
+                    )}
+                    {/* <Link href="/admin" className='cursor-pointer hover:text-gray-300'>
+                        <p>Admin</p>
+                    </Link> */}
+
+
+
                 </div>
             </div>
             {/* responsive */}
             <div className="flex items-center sm:hidden md:flex-row flex-col justify-between p-4 bg-gray-900">
-                <div className='flex items-center h-15 justify-between w-full md:w-auto'>
-                    <Logo />
+                <div className=' h-  w-full md:w-auto'>
+                    {/* <Logo /> */}
                     <SearchBar />
                 </div>
-                <div className='flex items-center justify-evenly w-full mx-6 mt-4 space-x-6 text-xs text-white'>
-                    {/* <Link href="/login" className='cursor-pointer hover:text-gray-300'>
-                        <p>Hello, mohamed</p>
-                        <p>Account, Lists</p>
-                    </Link> */}
+                <div className='flex items-center h-15 fixed bottom-0 bg-gray-900 justify-evenly w-full mx-6 mt-4 space-x-6 text-xs text-white'>
+                    <Link href="/" className='cursor-pointer hover:text-gray-300'>
+                        <p>Home</p>
+                    </Link>
+
+                    {/* dropdown */}
+                    <div className="relative md:text-sm text-[10px] inline-block text-left " onMouseEnter={() => setDropDown(true)} onMouseLeave={() => setDropDown(false)}>
+                        <button className="inline-flex justify-center items-center  rounded-md  transition-all duration-400">
+                            All
+                            <svg className="-mr-1 md:h-5 h-4 md:w-5 w-4 text-gray-400 transition-all duration-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        {dropDown && (
+                            <div className="absolute left-0 z-10 mt-1 w-48 rounded-sm bg-white shadow-lg">
+                                <div role="none" className='max-h-64 overflow-y-auto'>
+                                    {navitems.map((item, index) => (
+                                        <div key={index} className="block px-2 py-1 text-sm text-black hover:bg-gray-100">
+                                            {item}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
 
                     {user ? <div onClick={handleLogout} className='cursor-pointer hover:text-gray-300'>
-                        <p>Hello, {user.user_metadata.name}</p>
                         <p>sign out</p>
                     </div>
                         :
                         <Link href="/login" className='cursor-pointer hover:text-gray-300'>
-                            <p>Hello, Guest</p>
                             <p>Sign In</p>
                         </Link>
                     }
@@ -151,7 +206,7 @@ export default function Navbar() {
             </div>
 
             {/* bottom navbar */}
-            <div className="flex items-center p-1 space-x-3 text-xs text-white bg-gray-700 h-7">
+            <div className="sm:flex items-center p-1 hidden space-x-3 text-xs text-white bg-gray-700 sm:h-7">
 
                 {/* dropdown */}
                 <div className="relative md:text-sm text-[10px] inline-block text-left " onMouseEnter={() => setDropDown(true)} onMouseLeave={() => setDropDown(false)}>

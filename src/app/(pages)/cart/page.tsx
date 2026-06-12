@@ -15,7 +15,9 @@ export default function Cart() {
 
     async function createCheckOutSession() {
         const stripe = await stripePromise
-
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('pendingCart', JSON.stringify({ items: cartItems, userId }))
+        }
         const checkoutSession = await axios.post('/api/create-checkOut-session', {
             items: cartItems.map(item => ({ ...item, userId })),
             email: ''
@@ -45,7 +47,7 @@ export default function Cart() {
                                     alt={item.title}
                                     width={1000}
                                     height={400}
-                                    className='object-contain'
+                                    className='object-contain w-1/2 md:w-full'
                                 />
                             </div>
                             <div className='col-span-7 md:col-span-4 p-3 rounded-sm bg-gray-100 flex flex-col'>

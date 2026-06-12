@@ -41,7 +41,7 @@ export default function RootLayout({
             <main className="flex-1 mt-25">
               {children}
             </main>
-            <Footer />
+            {/* <Footer /> */}
           </ReduxProvider>
         </AuthProvider>
       </body>

@@ -45,6 +45,9 @@ export const cartSlice = createSlice({
             const { userId } = action.payload
             state.carts[userId] = []
         },
+        loadCart: (state, action) => {
+            state.carts = action.payload
+        },
     }
 })
 
@@ -54,6 +57,7 @@ export const {
     increaseQuantity,
     decreaseQuantity,
     emptyCart,
+    loadCart
 } = cartSlice.actions
 
 export const selectItems = (userId: string) => (state: { cart: CartState }) =>
